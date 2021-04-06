@@ -1,0 +1,71 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.hello {
+  font-weight: bold;
+  font-size: 2.5rem;
+  text-transform: uppercase;
+  font-family: sans-serif;
+  letter-spacing: 2px;
+}
+
+.grid {
+  width: 480px;
+  height: 480px;
+  display: flex;
+  flex-wrap: wrap;
+  background-color: grey;
+}
+
+.grid div {
+  height: 30px;
+  width: 30px;
+  margin: 0;
+  padding: 0;
+}
+
+.grid .boom {
+  background-color: red;
+}
+
+.grid .number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  font-weight: bolder;
+  color: #fff;
+}
+
+.grid .zero {
+  background-color: black;
+}
+
+.grid .numbers {
+  background-color: blue;
+}
+
+.game-txt {
+  font-size: 2.4rem;
+  color: red;
+  font-weight: bold;
+  font-family: sans-serif;
+  letter-spacing: 2px;
+
+  /*  border: dotted 4px red; */
+
+  margin-top: 1.5rem;
+  padding: 0.5em;
+}
