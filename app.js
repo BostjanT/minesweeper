@@ -91,10 +91,11 @@ createBoard();
 const showNumbers = (square) => {
   let numbers = square.getAttribute("data");
   let id = square.id;
-  square.innerText = numbers;
+  square.innerText = id;
   if (square.classList.contains("boom")) {
     gameText.style.border = "dotted 4px red";
     gameText.innerHTML = "GAME OVER";
+    return;
   } else if (numbers == 0) {
     square.classList.add("zero");
     checkSquare(square, id);
@@ -109,6 +110,47 @@ function checkSquare(square, id) {
 
   const leftSide = id % width === 0;
   const rightSide = id === width - 1;
-  /*  if (id > 0 && !leftSide) checkSquare(square, id + 1);
-  if (id > 15 && !rightSide) checkSquare(square, id + 1); */
+  if (id > 0 && !leftSide) {
+    let newId = squares[parseInt(id) - 1].id;
+    let newSquare = document.getElementById(newId);
+    showNumbers(newSquare);
+  }
+  if (id > 15 && !rightSide) {
+    let newId = squares[parseInt(id) + 1 - width].id;
+    let newSquare = document.getElementById(newId);
+    showNumbers(newSquare);
+  }
+
+  if (id > 16) {
+    let newId = squares[parseInt(id) - width].id;
+    let newSquare = document.getElementById(newId);
+    showNumbers(newSquare);
+  }
+
+  if (id > 17 && !leftSide) {
+    let newId = squares[parseInt(id) - 1 - width].id;
+    let newSquare = document.getElementById(newId);
+    showNumbers(newSquare);
+  }
+
+  if (id < 255 && !rightSide) {
+    let newId = squares[parseInt(id) + 1].id;
+    let newSquare = document.getElementById(newId);
+    showNumbers(newSquare);
+  }
+  if (id < 241 && !leftSide) {
+    let newId = squares[parseInt(id) + width].id;
+    let newSquare = document.getElementById(newId);
+    showNumbers(newSquare);
+  }
+  if (id < 240) {
+    let newId = squares[parseInt(id) + width].id;
+    let newSquare = document.getElementById(newId);
+    showNumbers(newSquare);
+  }
+  if (id < 239 && !rightSide) {
+    let newId = squares[parseInt(id) + 1 + width].id;
+    let newSquare = document.getElementById(newId);
+    showNumbers(newSquare);
+  }
 }
