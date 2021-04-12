@@ -35,6 +35,12 @@ const createBoard = () => {
 
     square.addEventListener("click", (e) => {
       showNumbers(square);
+      if (square.classList.contains("boom")) {
+        square.classList.add("show-boom");
+        gameText.style.border = "dotted 4px red";
+        gameText.innerHTML = "GAME OVER";
+        grid.style.pointerEvents = "none";
+      }
     });
   }
 
@@ -92,33 +98,26 @@ const showNumbers = (square) => {
   let numbers = square.getAttribute("data");
   let id = square.id;
 
-  if (
-    square.classList.contains("numbers") ||
-    square.classList.contains("zero") ||
-    numbers > 0
-  )
+  if (square.classList.contains("numbers") || square.classList.contains("zero"))
     return;
 
   if (square.classList.contains("boom")) {
-    gameText.style.border = "dotted 4px red";
-    gameText.innerHTML = "GAME OVER";
+    /*  gameText.style.border = "dotted 4px red";
+    gameText.innerHTML = "GAME OVER"; */
     return;
   } else {
     if (numbers != 0) {
       square.classList.add("numbers");
       square.innerText = numbers;
       return;
+    } else {
+      square.classList.add("zero");
     }
-    square.classList.add("zero");
-    square.innerText = numbers;
     checkSquare(square, id);
   }
 };
 
 function checkSquare(square, id) {
-  console.log("does this work");
-  console.log(square, square.id);
-
   const leftSide = id % width === 0;
   const rightSide = id % width === width - 1;
   setTimeout(() => {
@@ -167,5 +166,5 @@ function checkSquare(square, id) {
       let newSquare = document.getElementById(newId);
       showNumbers(newSquare);
     }
-  }, 100);
+  }, 50);
 }

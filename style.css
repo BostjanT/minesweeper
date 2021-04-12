@@ -34,9 +34,15 @@ body {
   width: 30px;
   margin: 0;
   padding: 0;
+  border: 1px solid black;
 }
 
 .grid .boom {
+  border: 1px solid black;
+}
+
+.grid .show-boom {
+  opacity: 1;
   background-color: red;
 }
 
@@ -50,7 +56,7 @@ body {
 }
 
 .grid .zero {
-  background-color: black;
+  background-color: #43d221;
 }
 
 .grid .numbers {
