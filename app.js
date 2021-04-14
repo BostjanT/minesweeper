@@ -1,28 +1,31 @@
 const grid = document.querySelector(".grid");
 const gameText = document.querySelector(".game-txt");
+const restartBtn = document.getElementById("game-restart");
 
 let width = 16;
-let bombs = 10;
+let bombs = 40;
 let squares = [];
+let gameEnd = false;
 
 //lets create gaming board
 const createBoard = () => {
   const bombSquares = Array(bombs).fill("boom");
   const emptySquares = Array(width * width - bombs).fill("number");
   const gameSquares = emptySquares.concat(bombSquares);
-  const randomSquares = gameSquares.sort(() => 0.5 - Math.random());
+  const randomSquares = gameSquares.sort(() => {
+    return Math.random() - 0.4;
+  });
 
-  /*   
-  SHUFFLE ARRAY AND RETURN IT BACK
+  /*   SHUFFLE ARRAY AND RETURN IT BACK */
 
-  var original = ["a", "b", "c", "d", "e", "f", "g"];
+  /*   var original = ["a", "b", "c", "d", "e", "f", "g"];
   var copy = [].concat(original);
   copy.sort(function () {
     return 0.5 - Math.random();
   });
-  console.log(copy); */
+  console.log(copy, "mapped"); */
 
-  /*  console.log(randomSquares); */
+  console.log(randomSquares);
 
   for (let i = 0; i < width * width; i++) {
     const square = document.createElement("div");
@@ -35,12 +38,7 @@ const createBoard = () => {
 
     square.addEventListener("click", (e) => {
       showNumbers(square);
-      if (square.classList.contains("boom")) {
-        square.classList.add("show-boom");
-        gameText.style.border = "dotted 4px red";
-        gameText.innerHTML = "GAME OVER";
-        grid.style.pointerEvents = "none";
-      }
+      gameOver(square);
     });
   }
 
@@ -168,3 +166,46 @@ function checkSquare(square, id) {
     }
   }, 50);
 }
+
+// GAME OVER
+const gameOver = (square) => {
+  if (square.classList.contains("boom")) {
+    square.classList.add("show-boom");
+    gameText.style.border = "dotted 4px red";
+    gameText.innerHTML = "GAME OVER";
+    grid.style.pointerEvents = "none";
+    gameEnd = true;
+  }
+};
+
+// restart game
+const restartGame = (square) => {
+  if (gameEnd) {
+    square.classList.remove("boom");
+    square.classList.remove("number");
+    square.classList.remove("zero");
+    gameText.innerHTML = "";
+    grid.style.pointerEvents = "all";
+    gameEnd = false;
+  }
+};
+
+restartBtn.addEventListener("click", () => {
+  location.reload();
+  return false;
+});
+
+let rightClick = new MouseEvent("contextmenu", {
+  bubbles: true,
+  cancelable: true,
+  view: window,
+  button: 2,
+  buttons: 0,
+  clientX: grid.getBoundingClientRect().x,
+  clientY: grid.getBoundingClientRect().y,
+});
+
+grid.oncontextmenu = (e) => {
+  e.preventDefault();
+  grid.dispatchEvent(rightClick);
+};
