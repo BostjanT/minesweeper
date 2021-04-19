@@ -21,6 +21,30 @@ body {
   letter-spacing: 2px;
 }
 
+.container {
+  background-color: grey;
+  width: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 5px solid black;
+  padding: 5px 0;
+}
+
+.flags-left {
+  font-size: 1.5rem;
+  font-family: "Roboto", sans-serif;
+  margin-left: 10px;
+  color: #fff;
+}
+
+.timer {
+  color: #fff;
+  font-size: 1.5rem;
+  font-family: "Roboto", sans-serif;
+  margin-right: 1rem;
+}
+
 .grid {
   width: 480px;
   height: 480px;
@@ -99,12 +123,65 @@ body {
   background-color: blue;
 }
 
+.one {
+  color: #fff;
+}
+
+.two {
+  color: greenyellow;
+}
+
+.three {
+  color: orange;
+}
+
+.four {
+  color: red;
+}
+
+.five {
+  color: purple;
+}
+
+.grid .flag {
+  background-color: grey;
+  position: relative;
+}
+
+.grid .flag::before {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 3px;
+  height: 20px;
+  background-color: black;
+
+  top: 4px;
+  left: 5px;
+}
+.grid .flag::after {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 14px;
+  height: 12px;
+  background-color: red;
+  clip-path: polygon(100% 50%, 0 0, 0 100%);
+
+  top: 4px;
+  left: 8px;
+}
+
+.cross {
+  background-color: transparent;
+}
+
 .game-txt {
   font-size: 2.4rem;
   color: red;
   font-weight: bold;
   font-family: sans-serif;
-  letter-spacing: 2px; 
+  letter-spacing: 2px;
 
   margin-top: 1.5rem;
   padding: 0.5em;
@@ -114,7 +191,7 @@ body {
   font-size: 1.2rem;
   letter-spacing: 1px;
   font-family: "Roboto", sans-serif;
-  margin-top: 1rem;
+
   padding: 0.5rem 1rem;
   border-radius: 0.4rem;
   border: unset;
