@@ -12,17 +12,27 @@ let isGameOver = false;
 let time = 0;
 flagsLeft.innerHTML = bombs;
 
-function gameTimer() {
+/* function gameTimer() {
   setTimeout(() => {
     time++;
     timer.innerHTML = time;
-    gameTimer;
+    gameTimer();
   }, 1000);
 }
 
 function stopTimer() {
   clearTimeout(gameTimer);
-  /* time = 0; */
+} */
+
+function gameTimer() {
+  setInterval(() => {
+    time++;
+    timer.innerHTML = time;
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(gameTimer);
 }
 
 //lets create gaming board
@@ -220,8 +230,6 @@ const gameOver = (square) => {
     gameText.innerHTML = "GAME OVER";
     grid.style.pointerEvents = "none";
     isGameOver = true;
-    stopTimer();
-    didIwin();
   }
 
   squares.forEach((square) => {
@@ -230,6 +238,12 @@ const gameOver = (square) => {
         square.classList.add("show-boom");
         square.classList.remove("flag");
       }, 300);
+    }
+    if (
+      square.classList.contains("boom") &&
+      square.classList.contains("flag")
+    ) {
+      square.classList.add("cross");
     }
   });
 };
@@ -242,13 +256,15 @@ const restartGame = () => {
     square.classList.remove("zero");
     square.classList.remove("flag");
     square.innerHTML = "";
+    square.classList.remove("cross");
     gameText.innerHTML = "";
     grid.style.pointerEvents = "auto";
     isGameOver = false;
     flags = 0;
     flagsLeft.innerHTML = bombs;
-    stopTimer();
     timer.innerHTML = 0;
+    time = 0;
+    gameTimer();
   });
 };
 
