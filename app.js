@@ -13,20 +13,16 @@ let time = 0;
 flagsLeft.innerHTML = bombs;
 
 function gameTimer() {
-  if (!isGameOver) {
-    setTimeout(() => {
-      time++;
-      timer.innerHTML = time;
-      gameTimer();
-    }, 1000);
-  }
+  setTimeout(() => {
+    time++;
+    timer.innerHTML = time;
+    gameTimer;
+  }, 1000);
 }
 
 function stopTimer() {
-  if (isGameOver) {
-    clearTimeout(gameTimer);
-    time = 0;
-  }
+  clearTimeout(gameTimer);
+  /* time = 0; */
 }
 
 //lets create gaming board
@@ -48,7 +44,6 @@ const createBoard = () => {
     const square = document.createElement("div");
     square.setAttribute("id", i);
     /*in a line below we add class from the array above with its "word" and add it to the square. This is how we will change the look of the squares in the game. */
-    /* square.classList.add(randomSquares[i]); */
     square.classList.add(testingArray[i].square);
 
     grid.appendChild(square);
@@ -56,9 +51,12 @@ const createBoard = () => {
 
     square.addEventListener("click", (e) => {
       showNumbers(square);
-      gameOver(square);
-      didIwin(square);
       gameTimer();
+      if (square.classList.contains("boom")) {
+        stopTimer();
+        gameOver(square);
+        didIwin(square);
+      }
     });
 
     square.oncontextmenu = (e) => {
@@ -223,6 +221,7 @@ const gameOver = (square) => {
     grid.style.pointerEvents = "none";
     isGameOver = true;
     stopTimer();
+    didIwin();
   }
 
   squares.forEach((square) => {
@@ -249,6 +248,7 @@ const restartGame = () => {
     flags = 0;
     flagsLeft.innerHTML = bombs;
     stopTimer();
+    timer.innerHTML = 0;
   });
 };
 
