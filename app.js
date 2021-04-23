@@ -12,27 +12,16 @@ let isGameOver = false;
 let time = 0;
 flagsLeft.innerHTML = bombs;
 
-/* function gameTimer() {
+const gameTimer = () => {
   setTimeout(() => {
     time++;
     timer.innerHTML = time;
     gameTimer();
   }, 1000);
-}
+};
 
 function stopTimer() {
   clearTimeout(gameTimer);
-} */
-
-function gameTimer() {
-  setInterval(() => {
-    time++;
-    timer.innerHTML = time;
-  }, 1000);
-}
-
-function stopTimer() {
-  clearInterval(gameTimer);
 }
 
 //lets create gaming board
@@ -61,9 +50,7 @@ const createBoard = () => {
 
     square.addEventListener("click", (e) => {
       showNumbers(square);
-      gameTimer();
       if (square.classList.contains("boom")) {
-        stopTimer();
         gameOver(square);
         didIwin(square);
       }
@@ -143,6 +130,14 @@ const createBoard = () => {
 };
 
 createBoard();
+
+grid.addEventListener("click", () => {
+  if (!isGameOver) {
+    gameTimer;
+  } else {
+    stopTimer();
+  }
+});
 
 const showNumbers = (square) => {
   let numbers = square.getAttribute("data");
@@ -264,7 +259,6 @@ const restartGame = () => {
     flagsLeft.innerHTML = bombs;
     timer.innerHTML = 0;
     time = 0;
-    gameTimer();
   });
 };
 
@@ -280,20 +274,3 @@ const didIwin = (square) => {
     gameText.innerHTML = "YOU WON THE GAME";
   }
 };
-
-/* let rightClick = new MouseEvent("contextmenu", {
-  bubbles: true,
-  cancelable: true,
-  view: window,
-  button: 2,
-  buttons: 0,
-  clientX: grid.getBoundingClientRect().x,
-  clientY: grid.getBoundingClientRect().y,
-});
- */
-
-/* grid.oncontextmenu = (e, square) => {
-  e.preventDefault();
-  square.classList.add("flag");
-  square.dispatchEvent(rightClick);
-}; */
