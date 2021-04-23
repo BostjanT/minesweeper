@@ -131,14 +131,6 @@ const createBoard = () => {
 
 createBoard();
 
-grid.addEventListener("click", () => {
-  if (!isGameOver) {
-    gameTimer;
-  } else {
-    stopTimer();
-  }
-});
-
 const showNumbers = (square) => {
   let numbers = square.getAttribute("data");
   let id = square.id;
@@ -274,3 +266,12 @@ const didIwin = (square) => {
     gameText.innerHTML = "YOU WON THE GAME";
   }
 };
+
+grid.addEventListener("click", (e) => {
+  e.preventDefault();
+  if (isGameOver == false) {
+    gameTimer();
+  } else if (isGameOver == true) {
+    stopTimer();
+  }
+});
