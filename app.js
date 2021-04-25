@@ -12,7 +12,22 @@ let isGameOver = false;
 let time = 0;
 flagsLeft.innerHTML = bombs;
 
-const gameTimer = () => {
+let gameTimer;
+
+function startTiming() {
+  time++;
+  timer.innerHTML = time;
+}
+
+function start() {
+  gameTimer = setInterval(startTiming, 1000);
+}
+
+function stop() {
+  clearInterval(gameTimer);
+}
+
+/* const gameTimer = () => {
   setTimeout(() => {
     time++;
     timer.innerHTML = time;
@@ -22,7 +37,7 @@ const gameTimer = () => {
 
 function stopTimer() {
   clearTimeout(gameTimer);
-}
+} */
 
 //lets create gaming board
 const createBoard = () => {
@@ -217,6 +232,8 @@ const gameOver = (square) => {
     gameText.innerHTML = "GAME OVER";
     grid.style.pointerEvents = "none";
     isGameOver = true;
+    /* clearTimeout(gameTimer); */
+    stop();
   }
 
   squares.forEach((square) => {
@@ -269,9 +286,7 @@ const didIwin = (square) => {
 
 grid.addEventListener("click", (e) => {
   e.preventDefault();
-  if (isGameOver == false) {
-    gameTimer();
-  } else if (isGameOver == true) {
-    stopTimer();
+  if (time === 0) {
+    start();
   }
 });
