@@ -266,9 +266,11 @@ const restartGame = () => {
     isGameOver = false;
     flags = 0;
     flagsLeft.innerHTML = bombs;
+    grid.innerHTML = "";
     timer.innerHTML = 0;
     time = 0;
   });
+  createBoard();
 };
 
 restartBtn.addEventListener("click", restartGame);
