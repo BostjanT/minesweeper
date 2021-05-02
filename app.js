@@ -3,6 +3,7 @@ const gameText = document.querySelector(".game-txt");
 const restartBtn = document.getElementById("game-restart");
 const flagsLeft = document.querySelector(".flags-left");
 const timer = document.querySelector(".timer");
+const body = document.querySelector("body");
 
 let width = 16;
 let bombs = 40;
@@ -13,6 +14,7 @@ let time = 0;
 flagsLeft.innerHTML = bombs;
 
 let gameTimer;
+let isGameStarted = false;
 
 function startTiming() {
   time++;
@@ -20,24 +22,14 @@ function startTiming() {
 }
 
 function start() {
-  gameTimer = setInterval(startTiming, 1000);
+  if (!isGameStarted) {
+    gameTimer = setInterval(startTiming, 1000);
+  }
 }
 
 function stop() {
   clearInterval(gameTimer);
 }
-
-/* const gameTimer = () => {
-  setTimeout(() => {
-    time++;
-    timer.innerHTML = time;
-    gameTimer();
-  }, 1000);
-};
-
-function stopTimer() {
-  clearTimeout(gameTimer);
-} */
 
 //lets create gaming board
 const createBoard = () => {
@@ -45,14 +37,14 @@ const createBoard = () => {
   const emptySquares = Array(width * width - bombs).fill("number");
   const gameSquares = emptySquares.concat(bombSquares);
 
-  const testingArray = gameSquares.map((square) => {
-    let random = Math.floor(Math.random() * gameSquares.length);
-    return { random: random, square: square };
-  });
-
-  const randomSquares = testingArray.sort((square1, square2) => {
-    return square2.random - square1.random;
-  });
+  const testingArray = gameSquares
+    .map((square) => {
+      let random = Math.floor(Math.random() * gameSquares.length);
+      return { random: random, square: square };
+    })
+    .sort((square1, square2) => {
+      return square2.random - square1.random;
+    });
 
   for (let i = 0; i < width * width; i++) {
     const square = document.createElement("div");
@@ -79,65 +71,77 @@ const createBoard = () => {
   }
 
   // gamers board info
-  const showCounter = () => {
+  function showCounter() {
     let flagCounter = bombs - flags;
     flagsLeft.innerHTML = flagCounter;
-  };
+  }
 
-  const setFlag = (square) => {
+  function setFlag(square) {
     if (!square.classList.contains("flag")) {
       square.classList.add("flag");
       flags++;
-      console.log(flags);
     } else {
       square.classList.remove("flag");
       flags--;
-      console.log(flags);
     }
-  };
+  }
 
   // adding numbers to the square
   for (let i = 0; i < squares.length; i++) {
+    let fullWidth = width * width;
     let total = 0;
     const leftSide = i % width === 0;
     const rightSide = i % width === width - 1;
 
     if (squares[i].classList.contains("number")) {
-      if (i > 0 && !leftSide && squares[i - 1].classList.contains("boom"))
+      if (i > 0 && !leftSide && squares[i - 1].classList.contains("boom")) {
         total++;
+      }
       if (
-        i > 15 &&
+        i > width - 1 &&
         !rightSide &&
         squares[i + 1 - width].classList.contains("boom")
-      )
+      ) {
         total++;
-      if (i > 16 && squares[i - width].classList.contains("boom")) total++;
+      }
+      if (i > width && squares[i - width].classList.contains("boom")) {
+        total++;
+      }
       if (
-        i > 17 &&
+        i > width + 1 &&
         !leftSide &&
         squares[i - 1 - width].classList.contains("boom")
-      )
+      ) {
         total++;
-      if (i < 255 && !rightSide && squares[i + 1].classList.contains("boom"))
-        total++;
+      }
       if (
-        i < 239 &&
+        i < fullWidth - 1 &&
+        !rightSide &&
+        squares[i + 1].classList.contains("boom")
+      ) {
+        total++;
+      }
+      if (
+        i < fullWidth - width &&
         !leftSide &&
         squares[i - 1 + width].classList.contains("boom")
-      )
+      ) {
         total++;
+      }
       if (
-        i < 238 &&
+        i < fullWidth - (width + 2) &&
         !rightSide &&
         squares[i + 1 + width].classList.contains("boom")
-      )
+      ) {
         total++;
+      }
       if (
-        i < 239 &&
+        i < fullWidth - (width + 1) &&
         !rightSide &&
         squares[i + width].classList.contains("boom")
-      )
+      ) {
         total++;
+      }
 
       squares[i].setAttribute("data", total);
     }
@@ -174,6 +178,7 @@ const showNumbers = (square) => {
 };
 
 function checkSquare(square, id) {
+  let fullWidth = width * width;
   const leftSide = id % width === 0;
   const rightSide = id % width === width - 1;
   setTimeout(() => {
@@ -183,41 +188,41 @@ function checkSquare(square, id) {
       showNumbers(newSquare);
     }
 
-    if (id > 15 && !rightSide) {
+    if (id > width - 1 && !rightSide) {
       let newId = squares[parseInt(id) + 1 - width].id;
       let newSquare = document.getElementById(newId);
       showNumbers(newSquare);
     }
 
-    if (id > 16) {
+    if (id > width) {
       let newId = squares[parseInt(id) - width].id;
       let newSquare = document.getElementById(newId);
       showNumbers(newSquare);
     }
 
-    if (id > 17 && !leftSide) {
-      let newId = squares[parseInt(id) - 1 - width].id;
+    if (id > width + 1 && !leftSide) {
+      let newId = squares[parseInt(id) + 1 - width].id;
       let newSquare = document.getElementById(newId);
       showNumbers(newSquare);
     }
 
-    if (id < 255 && !rightSide) {
+    if (id < fullWidth - 1 && !rightSide) {
       let newId = squares[parseInt(id) + 1].id;
       let newSquare = document.getElementById(newId);
       showNumbers(newSquare);
     }
 
-    if (id < 240 && !leftSide) {
+    if (id < fullWidth - width && !leftSide) {
       let newId = squares[parseInt(id) - 1 + width].id;
       let newSquare = document.getElementById(newId);
       showNumbers(newSquare);
     }
-    if (id < 239) {
+    if (id < fullWidth - (width + 1)) {
       let newId = squares[parseInt(id) + width].id;
       let newSquare = document.getElementById(newId);
       showNumbers(newSquare);
     }
-    if (id < 238 && !rightSide) {
+    if (id < fullWidth - (width + 2) && !rightSide) {
       let newId = squares[parseInt(id) + 1 + width].id;
       let newSquare = document.getElementById(newId);
       showNumbers(newSquare);
@@ -226,13 +231,14 @@ function checkSquare(square, id) {
 }
 
 // GAME OVER
-const gameOver = (square) => {
+function gameOver(square) {
   if (square.classList.contains("boom")) {
     square.classList.add("show-boom");
-    gameText.innerHTML = "GAME OVER";
+    body.classList.add("over");
+    body.classList.add("gradient");
     grid.style.pointerEvents = "none";
     isGameOver = true;
-    /* clearTimeout(gameTimer); */
+    isGameStarted = false;
     stop();
   }
 
@@ -250,10 +256,10 @@ const gameOver = (square) => {
       square.classList.add("cross");
     }
   });
-};
+}
 
 // restart game
-const restartGame = () => {
+function restartGame() {
   squares.forEach((square) => {
     square.classList.remove("show-boom");
     square.classList.remove("numbers");
@@ -261,21 +267,32 @@ const restartGame = () => {
     square.classList.remove("flag");
     square.innerHTML = "";
     square.classList.remove("cross");
-    gameText.innerHTML = "";
+    body.classList.remove("over");
+    body.classList.remove("gradient");
     grid.style.pointerEvents = "auto";
     isGameOver = false;
+    isGameStarted = false;
     flags = 0;
     flagsLeft.innerHTML = bombs;
     grid.innerHTML = "";
     timer.innerHTML = 0;
     time = 0;
+
+    square.removeEventListener("click", (e) => {
+      showNumbers(square);
+      if (square.classList.contains("boom")) {
+        gameOver(square);
+        didIwin(square);
+      }
+    });
   });
+  stop();
   createBoard();
-};
+}
 
 restartBtn.addEventListener("click", restartGame);
 
-const didIwin = (square) => {
+function didIwin(square) {
   if (
     flags === bombs &&
     !isGameOver &&
@@ -284,11 +301,11 @@ const didIwin = (square) => {
   ) {
     gameText.innerHTML = "YOU WON THE GAME";
   }
-};
+}
 
 grid.addEventListener("click", (e) => {
   e.preventDefault();
-  if (time === 0) {
+  if (time === 0 && (!e.detail || e.detail == 1)) {
     start();
   }
 });
