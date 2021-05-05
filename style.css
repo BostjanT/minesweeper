@@ -118,6 +118,17 @@ body {
 
 .grid .zero {
   background-color: #43d221;
+  animation-name: showDiv;
+  animation-duration: 0.3s;
+}
+
+@keyframes showDiv {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .numbers {
