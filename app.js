@@ -127,6 +127,7 @@ const createBoard = () => {
       }
       if (
         i < fullWidth - width &&
+        !bottomRow &&
         !leftSide &&
         squares[i - 1 + width].classList.contains("boom")
       ) {
@@ -134,6 +135,7 @@ const createBoard = () => {
       }
       if (
         i < fullWidth - (width + 2) &&
+        !bottomRow &&
         !rightSide &&
         squares[i + 1 + width].classList.contains("boom")
       ) {
@@ -141,6 +143,7 @@ const createBoard = () => {
       }
       if (
         i < fullWidth - (width + 1) &&
+        !bottomRow &&
         !rightSide &&
         squares[i + width].classList.contains("boom")
       ) {
