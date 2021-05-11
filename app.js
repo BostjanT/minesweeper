@@ -28,7 +28,7 @@ function start() {
 }
 
 function stop() {
-  clearInterval(gameTimer);
+  clearInterval(setTiming);
 }
 
 //lets create gaming board
