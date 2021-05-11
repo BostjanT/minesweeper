@@ -96,23 +96,25 @@ const createBoard = () => {
     const bottomRow = i >= fullWidth - width;
 
     if (squares[i].classList.contains("number")) {
-      if (i > 0 && !leftSide && squares[i - 1].classList.contains("boom")) {
+      if (i > 0 && squares[i - 1].classList.contains("boom")) {
         total++;
       }
       if (
         i > width - 1 &&
-        !topRow &&
         !rightSide &&
         squares[i + 1 - width].classList.contains("boom")
       ) {
         total++;
       }
-      if (i > width && squares[i - width].classList.contains("boom")) {
+      if (
+        i > width &&
+        !topRow &&
+        squares[i - width].classList.contains("boom")
+      ) {
         total++;
       }
       if (
         i > width + 1 &&
-        !topRow &&
         !leftSide &&
         squares[i - 1 - width].classList.contains("boom")
       ) {
@@ -144,7 +146,6 @@ const createBoard = () => {
       if (
         i < fullWidth - (width + 1) &&
         !bottomRow &&
-        !rightSide &&
         squares[i + width].classList.contains("boom")
       ) {
         total++;
@@ -188,10 +189,10 @@ function checkSquare(square, id) {
   let fullWidth = width * width;
   const leftSide = id % width === 0;
   const rightSide = id % width === width - 1;
-  /*  const topRow = i < width;
-  const bottomRow = i >= fullWidth - width; */
-  /* setTimeout(() => { */
-  if (id > 0 && !leftSide) {
+  const topRow = id < width;
+  const bottomRow = id >= fullWidth - width;
+
+  if (id > 0) {
     let newId = squares[parseInt(id) - 1].id;
     let newSquare = document.getElementById(newId);
     showNumbers(newSquare);
@@ -203,13 +204,13 @@ function checkSquare(square, id) {
     showNumbers(newSquare);
   }
 
-  if (id > width) {
+  if (id > width && !topRow) {
     let newId = squares[parseInt(id) - width].id;
     let newSquare = document.getElementById(newId);
     showNumbers(newSquare);
   }
 
-  if (id > width + 1 && !leftSide) {
+  if (id > width + 1 && !topRow && !leftSide) {
     let newId = squares[parseInt(id) + 1 - width].id;
     let newSquare = document.getElementById(newId);
     showNumbers(newSquare);
@@ -221,7 +222,7 @@ function checkSquare(square, id) {
     showNumbers(newSquare);
   }
 
-  if (id < fullWidth - width && !leftSide) {
+  if (id < fullWidth - width && !bottomRow && !leftSide) {
     let newId = squares[parseInt(id) - 1 + width].id;
     let newSquare = document.getElementById(newId);
     showNumbers(newSquare);
@@ -233,12 +234,11 @@ function checkSquare(square, id) {
     showNumbers(newSquare);
   }
 
-  if (id < fullWidth - (width + 2) && !rightSide) {
+  if (id < fullWidth - (width + 2) && !bottomRow && !rightSide) {
     let newId = squares[parseInt(id) + 1 + width].id;
     let newSquare = document.getElementById(newId);
     showNumbers(newSquare);
   }
-  /*  50) */
 }
 
 // GAME OVER
@@ -280,6 +280,8 @@ function restartGame() {
     square.classList.remove("cross");
     body.classList.remove("over");
     body.classList.remove("gradient");
+    body.classList.remove("win");
+    body.classList.remove("gameWin");
     grid.style.pointerEvents = "auto";
     isGameOver = false;
     isGameStarted = false;
@@ -310,7 +312,8 @@ function didIwin(square) {
     square.classList.contains("boom") &&
     square.classList.contains("flag")
   ) {
-    gameText.innerHTML = "YOU WON THE GAME";
+    body.classList.add("win");
+    body.classList.add("gameWin");
   }
 }
 

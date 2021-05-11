@@ -244,6 +244,33 @@ body {
   right: 21vw;
 }
 
+.win::before {
+  position: absolute;
+  content: "YOU";
+  display: block;
+  color: greenyellow;
+  font-weight: bold;
+  letter-spacing: 2px;
+  font-size: 5rem;
+  padding: 0.5em;
+
+  top: 40%;
+  left: 20%;
+}
+.win::after {
+  position: absolute;
+  content: "WON";
+  display: block;
+  color: greenyellow;
+  font-weight: bold;
+  letter-spacing: 2px;
+  font-size: 5rem;
+  padding: 0.5em;
+
+  top: 40%;
+  right: 21vw;
+}
+
 #game-restart {
   font-size: 1.2rem;
   letter-spacing: 1px;
@@ -267,5 +294,13 @@ body {
     90deg,
     rgba(59, 145, 167, 1) 25%,
     rgba(28, 11, 96, 1) 100%
+  );
+}
+
+.gameWin {
+  background: radial-gradient(
+    circle,
+    rgba(171, 251, 63, 1) 0%,
+    rgba(70, 252, 125, 1) 100%
   );
 }
