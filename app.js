@@ -28,7 +28,7 @@ function start() {
 }
 
 function stop() {
-  clearInterval(setTiming);
+  clearInterval(gameTimer);
 }
 
 //lets create gaming board
@@ -96,30 +96,31 @@ const createBoard = () => {
     const bottomRow = i >= fullWidth - width;
 
     if (squares[i].classList.contains("number")) {
-      if (i > 0 && squares[i - 1].classList.contains("boom")) {
+      //check left square
+      if (i > 0 && !leftSide && squares[i - 1].classList.contains("boom")) {
         total++;
       }
+      //check top right square
       if (
-        i > width - 1 &&
+        !topRow &&
         !rightSide &&
         squares[i + 1 - width].classList.contains("boom")
       ) {
         total++;
       }
-      if (
-        i > width &&
-        !topRow &&
-        squares[i - width].classList.contains("boom")
-      ) {
+      //check top square
+      if (!topRow && squares[i - width].classList.contains("boom")) {
         total++;
       }
+      //check top left square
       if (
-        i > width + 1 &&
+        !topRow &&
         !leftSide &&
         squares[i - 1 - width].classList.contains("boom")
       ) {
         total++;
       }
+      //check right square
       if (
         i < fullWidth - 1 &&
         !rightSide &&
@@ -127,27 +128,24 @@ const createBoard = () => {
       ) {
         total++;
       }
+      //check bottom left square
       if (
-        i < fullWidth - width &&
         !bottomRow &&
         !leftSide &&
         squares[i - 1 + width].classList.contains("boom")
       ) {
         total++;
       }
+      // check bottom right square
       if (
-        i < fullWidth - (width + 2) &&
         !bottomRow &&
         !rightSide &&
         squares[i + 1 + width].classList.contains("boom")
       ) {
         total++;
       }
-      if (
-        i < fullWidth - (width + 1) &&
-        !bottomRow &&
-        squares[i + width].classList.contains("boom")
-      ) {
+      //check bottom square
+      if (!bottomRow && squares[i + width].classList.contains("boom")) {
         total++;
       }
 
@@ -192,26 +190,26 @@ function checkSquare(square, id) {
   const topRow = id < width;
   const bottomRow = id >= fullWidth - width;
 
-  if (id > 0) {
+  if (id > 0 && !leftSide) {
     let newId = squares[parseInt(id) - 1].id;
     let newSquare = document.getElementById(newId);
     showNumbers(newSquare);
   }
 
-  if (id > width - 1 && !rightSide) {
+  if (!topRow && !rightSide) {
     let newId = squares[parseInt(id) + 1 - width].id;
     let newSquare = document.getElementById(newId);
     showNumbers(newSquare);
   }
 
-  if (id > width && !topRow) {
+  if (!topRow) {
     let newId = squares[parseInt(id) - width].id;
     let newSquare = document.getElementById(newId);
     showNumbers(newSquare);
   }
 
-  if (id > width + 1 && !topRow && !leftSide) {
-    let newId = squares[parseInt(id) + 1 - width].id;
+  if (!topRow && !leftSide) {
+    let newId = squares[parseInt(id) - 1 - width].id;
     let newSquare = document.getElementById(newId);
     showNumbers(newSquare);
   }
@@ -222,19 +220,19 @@ function checkSquare(square, id) {
     showNumbers(newSquare);
   }
 
-  if (id < fullWidth - width && !bottomRow && !leftSide) {
+  if (!bottomRow && !leftSide) {
     let newId = squares[parseInt(id) - 1 + width].id;
     let newSquare = document.getElementById(newId);
     showNumbers(newSquare);
   }
 
-  if (id < fullWidth - (width + 1)) {
+  if (!bottomRow) {
     let newId = squares[parseInt(id) + width].id;
     let newSquare = document.getElementById(newId);
     showNumbers(newSquare);
   }
 
-  if (id < fullWidth - (width + 2) && !bottomRow && !rightSide) {
+  if (!bottomRow && !rightSide) {
     let newId = squares[parseInt(id) + 1 + width].id;
     let newSquare = document.getElementById(newId);
     showNumbers(newSquare);
