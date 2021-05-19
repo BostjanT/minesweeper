@@ -55,13 +55,23 @@ const createBoard = () => {
     grid.appendChild(square);
     squares.push(square);
 
-    square.addEventListener("click", (e) => {
+    const listen2square = () => {
       showNumbers(square);
       if (square.classList.contains("boom")) {
         gameOver(square);
         didIwin(square);
       }
-    });
+    };
+
+    square.addEventListener("click", listen2square);
+
+    /*   square.onclick = () => {
+      showNumbers(square);
+      if (square.classList.contains("boom")) {
+        gameOver(square);
+        didIwin(square);
+      }
+    }; */
 
     square.oncontextmenu = (e) => {
       e.preventDefault();
@@ -97,7 +107,7 @@ const createBoard = () => {
 
     if (squares[i].classList.contains("number")) {
       //check left square
-      if (i > 0 && !leftSide && squares[i - 1].classList.contains("boom")) {
+      if (!leftSide && squares[i - 1].classList.contains("boom")) {
         total++;
       }
       //check top right square
@@ -121,11 +131,7 @@ const createBoard = () => {
         total++;
       }
       //check right square
-      if (
-        i < fullWidth - 1 &&
-        !rightSide &&
-        squares[i + 1].classList.contains("boom")
-      ) {
+      if (!rightSide && squares[i + 1].classList.contains("boom")) {
         total++;
       }
       //check bottom left square
@@ -289,13 +295,8 @@ function restartGame() {
     timer.innerHTML = 0;
     time = 0;
 
-    square.removeEventListener("click", (e) => {
-      showNumbers(square);
-      if (square.classList.contains("boom")) {
-        gameOver(square);
-        didIwin(square);
-      }
-    });
+    /*  square.removeEventListener("click", listen2square); */
+    grid.removeEventListener("click", preventDoubleClick);
   });
   stop();
   createBoard();
@@ -315,9 +316,11 @@ function didIwin(square) {
   }
 }
 
-grid.addEventListener("click", (e) => {
+const preventDoubleClick = (e) => {
   e.preventDefault();
   if (time === 0 && (!e.detail || e.detail == 1)) {
     start();
   }
-});
+};
+
+grid.addEventListener("click", preventDoubleClick);
