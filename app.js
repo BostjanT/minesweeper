@@ -11,6 +11,9 @@ let flags = 0;
 let squares = [];
 let isGameOver = false;
 let time = 0;
+let bombCounter = 0;
+let flagedArray = [];
+let openedArray = [];
 flagsLeft.innerHTML = bombs;
 
 let gameTimer;
@@ -57,26 +60,40 @@ const createBoard = () => {
 
     const listen2square = () => {
       showNumbers(square);
+      openedSquares();
       if (square.classList.contains("boom")) {
         gameOver(square);
         didIwin(square);
       }
     };
-
     square.addEventListener("click", listen2square);
 
-    /*   square.onclick = () => {
-      showNumbers(square);
-      if (square.classList.contains("boom")) {
-        gameOver(square);
-        didIwin(square);
+    function openedSquares() {
+      if (
+        square.classList.contains("number") ||
+        square.classList.contains("zero")
+      ) {
+        openedArray.push(square);
+        console.log(openedArray);
       }
-    }; */
+    }
+
+    function flagedSquares() {
+      if (
+        square.classList.contains("boom") &&
+        square.classList.contains("flag")
+      ) {
+        bombCounter++;
+        flagedArray.push(square);
+        console.log(flagedArray.length);
+      }
+    }
 
     square.oncontextmenu = (e) => {
       e.preventDefault();
       setFlag(square);
       showCounter();
+      flagedSquares();
     };
   }
 
@@ -294,9 +311,7 @@ function restartGame() {
     grid.innerHTML = "";
     timer.innerHTML = 0;
     time = 0;
-
-    /*  square.removeEventListener("click", listen2square); */
-    grid.removeEventListener("click", preventDoubleClick);
+    bombSquares = 0;
   });
   stop();
   createBoard();
@@ -304,12 +319,10 @@ function restartGame() {
 
 restartBtn.addEventListener("click", restartGame);
 
-function didIwin(square) {
+function didIwin() {
   if (
-    flags === bombs &&
-    !isGameOver &&
-    square.classList.contains("boom") &&
-    square.classList.contains("flag")
+    (flags == bombs || flagedArray.length == bombSquares.length) &&
+    !isGameOver
   ) {
     body.classList.add("win");
     body.classList.add("gameWin");
