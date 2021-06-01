@@ -6,13 +6,13 @@ const timer = document.querySelector(".timer");
 const body = document.querySelector("body");
 
 let width = 16;
-let bombs = 40;
+let bombs = 10;
 let flags = 0;
 let squares = [];
 let isGameOver = false;
 let time = 0;
 let bombCounter = 0;
-let flagedArray = [];
+let flaggedArray = [];
 let openedArray = [];
 flagsLeft.innerHTML = bombs;
 
@@ -60,40 +60,19 @@ const createBoard = () => {
 
     const listen2square = () => {
       showNumbers(square);
-      openedSquares();
+      openedSquares(square);
       if (square.classList.contains("boom")) {
         gameOver(square);
-        didIwin(square);
+        didIwin();
       }
     };
     square.addEventListener("click", listen2square);
-
-    function openedSquares() {
-      if (
-        square.classList.contains("number") ||
-        square.classList.contains("zero")
-      ) {
-        openedArray.push(square);
-        console.log(openedArray);
-      }
-    }
-
-    function flagedSquares() {
-      if (
-        square.classList.contains("boom") &&
-        square.classList.contains("flag")
-      ) {
-        bombCounter++;
-        flagedArray.push(square);
-        console.log(flagedArray.length);
-      }
-    }
 
     square.oncontextmenu = (e) => {
       e.preventDefault();
       setFlag(square);
       showCounter();
-      flagedSquares();
+      flaggedSquares(square);
     };
   }
 
@@ -262,6 +241,23 @@ function checkSquare(square, id) {
   }
 }
 
+function openedSquares(square) {
+  if (
+    square.classList.contains("number") ||
+    square.classList.contains("zero")
+  ) {
+    openedArray.push(square);
+  }
+}
+
+function flaggedSquares(square) {
+  if (square.classList.contains("boom") && square.classList.contains("flag")) {
+    bombCounter++;
+    flaggedArray.push(square);
+    console.log(flaggedArray.length);
+  }
+}
+
 // GAME OVER
 function gameOver(square) {
   if (square.classList.contains("boom")) {
@@ -311,7 +307,7 @@ function restartGame() {
     grid.innerHTML = "";
     timer.innerHTML = 0;
     time = 0;
-    bombSquares = 0;
+    flaggedArray.length = 0;
   });
   stop();
   createBoard();
@@ -320,12 +316,10 @@ function restartGame() {
 restartBtn.addEventListener("click", restartGame);
 
 function didIwin() {
-  if (
-    (flags == bombs || flagedArray.length == bombSquares.length) &&
-    !isGameOver
-  ) {
+  if ((flags == bombs || flaggedArray.length == bombs) && !isGameOver) {
     body.classList.add("win");
     body.classList.add("gameWin");
+    console.log(flaggedArray.length);
   }
 }
 
