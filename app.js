@@ -63,7 +63,6 @@ const createBoard = () => {
       openedSquares(square);
       if (square.classList.contains("boom")) {
         gameOver(square);
-        didIwin();
       }
     };
     square.addEventListener("click", listen2square);
@@ -73,6 +72,7 @@ const createBoard = () => {
       setFlag(square);
       showCounter();
       flaggedSquares(square);
+      didIwin();
     };
   }
 
@@ -295,20 +295,20 @@ function restartGame() {
     square.classList.remove("flag");
     square.innerHTML = "";
     square.classList.remove("cross");
-    body.classList.remove("over");
-    body.classList.remove("gradient");
-    body.classList.remove("win");
-    body.classList.remove("gameWin");
-    grid.style.pointerEvents = "auto";
-    isGameOver = false;
-    isGameStarted = false;
-    flags = 0;
-    flagsLeft.innerHTML = bombs;
-    grid.innerHTML = "";
-    timer.innerHTML = 0;
-    time = 0;
-    flaggedArray.length = 0;
   });
+  body.classList.remove("over");
+  body.classList.remove("gradient");
+  body.classList.remove("win");
+  body.classList.remove("gameWin");
+  grid.style.pointerEvents = "auto";
+  isGameOver = false;
+  isGameStarted = false;
+  flags = 0;
+  flagsLeft.innerHTML = bombs;
+  grid.innerHTML = "";
+  timer.innerHTML = 0;
+  time = 0;
+  flaggedArray = [];
   stop();
   createBoard();
 }
@@ -320,6 +320,7 @@ function didIwin() {
     body.classList.add("win");
     body.classList.add("gameWin");
     console.log(flaggedArray.length);
+    stop();
   }
 }
 
