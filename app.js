@@ -1,9 +1,12 @@
-const grid = document.querySelector(".grid");
+/* const grid = document.querySelector(".grid"); */
+const board = document.querySelector(".board");
 const gameText = document.querySelector(".game-txt");
 const restartBtn = document.getElementById("game-restart");
 const flagsLeft = document.querySelector(".flags-left");
 const timer = document.querySelector(".timer");
 const body = document.querySelector("body");
+
+const grid = document.createElement("div");
 
 let width = 16;
 let bombs = 10;
@@ -40,6 +43,7 @@ const createBoard = () => {
   const emptySquares = Array(width * width - bombs).fill("number");
   const gameSquares = emptySquares.concat(bombSquares);
 
+  //testingArray
   const testingArray = gameSquares
     .map((square) => {
       let random = Math.floor(Math.random() * gameSquares.length);
@@ -47,31 +51,46 @@ const createBoard = () => {
     })
     .sort((square1, square2) => {
       return square2.random - square1.random;
+    })
+    .map((squareGeneratorInfo, i) => {
+      const square = document.createElement("div");
+      square.id = i;
+      grid.appendChild(square);
     });
 
-  for (let i = 0; i < width * width; i++) {
-    const square = document.createElement("div");
-    square.setAttribute("id", i);
-    /*in a line below we add class from the array above with its "word" and add it to the square. This is how we will change the look of the squares in the game. */
-    square.classList.add(testingArray[i].square);
+  const squareInfoObj = {
+    htmlElement: square,
+    bomb: squareGeneratorInfo.square === "boom",
+    wasChecked: false,
+    surroundingBombs: null,
+  };
+  grid.classList.add("grid");
+  board.appendChild(grid);
 
-    grid.appendChild(square);
-    squares.push(square);
+  for (let i = 0; i < width * width; i++) {
+    /* square.setAttribute("id", i); */
+    /*in a line below we add class from the array above with its "word" and add it to the square. This is how we will change the look of the squares in the game. */
+    /* square.classList.add(testingArray[i].square); */
+
+    /* squares.push(square);
+
+    grid.appendChild(square); */
 
     const listen2square = () => {
-      showNumbers(square);
-      openedSquares(square);
-      if (square.classList.contains("boom")) {
-        gameOver(square);
+      showNumbers(squareInfoObj);
+      openedSquares(squareInfoObj);
+      if (squareInfoObj.bomb) {
+        gameOver(squareInfoObj);
       }
     };
+
     square.addEventListener("click", listen2square);
 
     square.oncontextmenu = (e) => {
       e.preventDefault();
-      setFlag(square);
+      setFlag(squareInfoObj);
       showCounter();
-      flaggedSquares(square);
+      flaggedSquares(squareInfoObj);
       didIwin();
     };
   }
@@ -82,12 +101,12 @@ const createBoard = () => {
     flagsLeft.innerHTML = flagCounter;
   }
 
-  function setFlag(square) {
-    if (!square.classList.contains("flag")) {
-      square.classList.add("flag");
+  function setFlag(squareInfoObj) {
+    if (!squareInfoObj.classList.contains("flag")) {
+      squareInfoObj.classList.add("flag");
       flags++;
     } else {
-      square.classList.remove("flag");
+      squareInfoObj.classList.remove("flag");
       flags--;
     }
   }
