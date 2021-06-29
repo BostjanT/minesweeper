@@ -1,4 +1,4 @@
-const grid = document.querySelector(".grid"); 
+const grid = document.querySelector(".grid");
 const board = document.querySelector(".board");
 const gameText = document.querySelector(".game-txt");
 const restartBtn = document.getElementById("game-restart");
@@ -6,7 +6,7 @@ const flagsLeft = document.querySelector(".flags-left");
 const timer = document.querySelector(".timer");
 const body = document.querySelector("body");
 
-
+/* const grid = document.createElement("div"); */
 
 let width = 16;
 let bombs = 10;
@@ -88,8 +88,8 @@ const createBoard = () => {
 
   console.log(squares);
 
-  grid.classList.add("grid");
-  board.appendChild(grid);
+  /*   grid.classList.add("grid");
+  board.appendChild(grid); */
 
   // gamers board info
   function showCounter() {
