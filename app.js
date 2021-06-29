@@ -55,7 +55,7 @@ const createBoard = () => {
     .map((squareGeneratorInfo, i) => {
       const square = document.createElement("div");
       square.id = i;
-      /* square.classList.add(gameSquares[i]); */
+      square.classList.add("number");
       grid.appendChild(square);
 
       const squareInfoObj = {
@@ -103,11 +103,10 @@ const createBoard = () => {
       square.classList.add("flag");
       flags++;
     } else {
+      squareInfoObj.wasChecked = false;
       square.classList.remove("flag");
       flags--;
     }
-    console.log(square);
-    console.log(squareInfoObj.wasChecked);
   }
 
   // adding numbers to the square
@@ -165,14 +164,14 @@ const showNumbers = (squareInfoObj) => {
   let id = squareInfoObj.htmlElement.id;
   let square = squareInfoObj.htmlElement;
 
-  console.log(numbers);
-  console.log(square);
+  /*  console.log(numbers);
+  console.log(square); */
   if (square.classList.contains("numbers") || square.classList.contains("zero"))
     return;
 
   if (square.classList.contains("boom")) return;
   else {
-    if (numbers != null) {
+    if (numbers != null || numbers !== 0) {
       square.classList.add("numbers");
 
       if (numbers == 1) square.classList.add("one");
@@ -280,7 +279,8 @@ function gameOver(squareInfoObj) {
   }
 
   squares.forEach((square) => {
-    if (isGameOver && square.classList.contains("boom")) {
+    console.log(square);
+    if (isGameOver && squareInfoObj.bomb) {
       setTimeout(() => {
         square.classList.add("show-boom");
         square.classList.remove("flag");
@@ -325,7 +325,11 @@ function restartGame() {
 restartBtn.addEventListener("click", restartGame);
 
 function didIwin() {
-  if ((flags == bombs || flaggedArray.length == bombs) && !isGameOver) {
+  if (
+    (flags == bombs || flaggedArray.length == bombs) &&
+    !isGameOver &&
+    squareInfoObj.wasChecked
+  ) {
     body.classList.add("win");
     body.classList.add("gameWin");
     console.log(flaggedArray.length);
