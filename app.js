@@ -80,7 +80,7 @@ const createBoard = () => {
         setFlag(squareInfoObj);
         showCounter();
         flaggedSquares(squareInfoObj);
-        didIwin();
+        didIwin(squareInfoObj);
       };
 
       return squareInfoObj;
@@ -99,13 +99,13 @@ const createBoard = () => {
 
   function setFlag(squareInfoObj) {
     let square = squareInfoObj.htmlElement;
-    if (!squareInfoObj.wasChecked) {
+    if ((squareInfoObj.wasChecked = true)) {
       square.classList.add("flag");
       flags++;
-    } else {
-      squareInfoObj.wasChecked = false;
+    } else if ((squareInfoObj.wasChecked = false)) {
       square.classList.remove("flag");
       flags--;
+      console.log(square);
     }
   }
 
@@ -169,7 +169,7 @@ const showNumbers = (squareInfoObj) => {
   if (square.classList.contains("numbers") || square.classList.contains("zero"))
     return;
 
-  if (square.classList.contains("boom")) return;
+  if (squareInfoObj.bomb) return;
   else {
     if (numbers != null || numbers !== 0) {
       square.classList.add("numbers");
@@ -185,12 +185,11 @@ const showNumbers = (squareInfoObj) => {
     } else {
       square.classList.add("zero");
     }
-    checkSquare(squareInfoObj, id);
+    checkSquare(squares[newId], id);
   }
 };
 
-function checkSquare(squareInfoObj, id) {
-  id = squareInfoObj.htmlElement.id;
+function checkSquare(squares, id) {
   let fullWidth = width * width;
   const leftSide = id % width === 0;
   const rightSide = id % width === width - 1;
@@ -199,50 +198,43 @@ function checkSquare(squareInfoObj, id) {
 
   if (id > 0 && !leftSide) {
     let newId = squares[parseInt(id) - 1].id;
-    let newSquare = document.getElementById(newId);
-    showNumbers(newSquare);
+    /*     let newSquare = document.getElementById(newId);
+     */ showNumbers(squares[newId], id);
   }
 
   if (!topRow && !rightSide) {
     let newId = squares[parseInt(id) + 1 - width].id;
-    let newSquare = document.getElementById(newId);
-    showNumbers(newSquare);
+    showNumbers(squares[newId], id);
   }
 
   if (!topRow) {
     let newId = squares[parseInt(id) - width].id;
-    let newSquare = document.getElementById(newId);
-    showNumbers(newSquare);
+    showNumbers(squares[newId], id);
   }
 
   if (!topRow && !leftSide) {
     let newId = squares[parseInt(id) - 1 - width].id;
-    let newSquare = document.getElementById(newId);
-    showNumbers(newSquare);
+    showNumbers(squares[newId], id);
   }
 
   if (id < fullWidth - 1 && !rightSide) {
     let newId = squares[parseInt(id) + 1].id;
-    let newSquare = document.getElementById(newId);
-    showNumbers(newSquare);
+    showNumbers(squares[newId], id);
   }
 
   if (!bottomRow && !leftSide) {
     let newId = squares[parseInt(id) - 1 + width].id;
-    let newSquare = document.getElementById(newId);
-    showNumbers(newSquare);
+    showNumbers(squares[newId], id);
   }
 
   if (!bottomRow) {
     let newId = squares[parseInt(id) + width].id;
-    let newSquare = document.getElementById(newId);
-    showNumbers(newSquare);
+    showNumbers(squares[newId], id);
   }
 
   if (!bottomRow && !rightSide) {
     let newId = squares[parseInt(id) + 1 + width].id;
-    let newSquare = document.getElementById(newId);
-    showNumbers(newSquare);
+    showNumbers(squares[newId], id);
   }
 }
 
@@ -257,8 +249,7 @@ function openedSquares(squareInfoObj) {
 }
 
 function flaggedSquares(squareInfoObj) {
-  let square = squareInfoObj.htmlElement;
-  if (square.classList.contains("boom") && square.classList.contains("flag")) {
+  if (squareInfoObj.bomb && squareInfoObj.wasChecked) {
     bombCounter++;
     flaggedArray.push(square);
     console.log(flaggedArray.length);
@@ -278,9 +269,9 @@ function gameOver(squareInfoObj) {
     stop();
   }
 
-  squares.forEach((square) => {
-    console.log(square);
-    if (isGameOver && squareInfoObj.bomb) {
+  squares.forEach((box) => {
+    let square = box.htmlElement;
+    if (isGameOver && box.bomb) {
       setTimeout(() => {
         square.classList.add("show-boom");
         square.classList.remove("flag");
@@ -324,7 +315,7 @@ function restartGame() {
 
 restartBtn.addEventListener("click", restartGame);
 
-function didIwin() {
+function didIwin(squareInfoObj) {
   if (
     (flags == bombs || flaggedArray.length == bombs) &&
     !isGameOver &&
